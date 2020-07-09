@@ -7,11 +7,11 @@ function SumofSquares_POP(x::Vector{PolyVar{true}},f::Polynomial{true},g::Vector
 
 
 
-    ceil_g=[@inbounds ceil(Int64,maxdegree(g[i])/2) for i in 1:l_g]
-    sk_g=[@inbounds binomial(k-ceil_g[i]+n,n) for i in 1:l_g]
 
-    ceil_h=[@inbounds ceil(Int64,maxdegree(h[i])/2) for i in 1:l_h]
-    s2k_h=[@inbounds binomial(2*(k-ceil_h[i])+n,n) for i in 1:l_h]
+    sk_g=[@inbounds binomial(k-ceil(Int64,maxdegree(g[i])/2)+n,n) for i in 1:l_g]
+
+
+    s2k_h=[@inbounds binomial(2*(k-ceil(Int64,maxdegree(h[i])/2))+n,n) for i in 1:l_h]
 
 
     model = SOSModel(optimizer_with_attributes(Mosek.Optimizer, QUIET=true))
@@ -19,20 +19,20 @@ function SumofSquares_POP(x::Vector{PolyVar{true}},f::Polynomial{true},g::Vector
     @objective(model, Max, lambda)
 
     wsos=f-lambda
-    sigma_monos = reverse(monomials(x, 0:k))
+    psi_monos = reverse(monomials(x, 0:2*k))
 
 
-    @variable(model, sigma0, SOSPoly(sigma_monos))
+    @variable(model, sigma0, SOSPoly(psi_monos))
     wsos-=sigma0
     for i in 1:l_g
-        sigma= @variable(model,[1:1], SOSPoly(sigma_monos[1:sk_g[i]]))
-            wsos-=sigma[1]*g[i]
+        sigma= @variable(model,[1:1], SOSPoly(psi_monos[1:sk_g[i]]))
+        wsos-=sigma[1]*g[i]
     end
 
-    psi_monos = reverse(monomials(x, 0:2*k))
+
     for i in 1:l_h
         psi=@variable(model, [1:1],Poly(psi_monos[1:s2k_h[i]]))
-            wsos-=psi[1]*h[i]
+        wsos-=psi[1]*h[i]
     end
 
 
@@ -57,11 +57,10 @@ function SumofSquares_POP_WithExtraction(x::Vector{PolyVar{true}},f::Polynomial{
 
 
 
-    ceil_g=[@inbounds ceil(Int64,maxdegree(g[i])/2) for i in 1:l_g]
-    sk_g=[@inbounds binomial(k-ceil_g[i]+n,n) for i in 1:l_g]
+    sk_g=[@inbounds binomial(k-ceil(Int64,maxdegree(g[i])/2)+n,n) for i in 1:l_g]
 
-    ceil_h=[@inbounds ceil(Int64,maxdegree(h[i])/2) for i in 1:l_h]
-    s2k_h=[@inbounds binomial(2*(k-ceil_h[i])+n,n) for i in 1:l_h]
+
+    s2k_h=[@inbounds binomial(2*(k-ceil(Int64,maxdegree(h[i])/2))+n,n) for i in 1:l_h]
 
 
     model = SOSModel(optimizer_with_attributes(Mosek.Optimizer, QUIET=true))
@@ -69,14 +68,14 @@ function SumofSquares_POP_WithExtraction(x::Vector{PolyVar{true}},f::Polynomial{
     @objective(model, Max, lambda)
 
     wsos=f-lambda
-    sigma_monos = reverse(monomials(x, 0:k))
+    psi_monos = reverse(monomials(x, 0:2*k))
 
     for i in 1:l_g
-        sigma= @variable(model,[1:1], SOSPoly(sigma_monos[1:sk_g[i]]))
+        sigma= @variable(model,[1:1], SOSPoly(psi_monos[1:sk_g[i]]))
             wsos-=sigma[1]*g[i]
     end
 
-    psi_monos = reverse(monomials(x, 0:2*k))
+
     for i in 1:l_h
         psi=@variable(model, [1:1],Poly(psi_monos[1:s2k_h[i]]))
             wsos-=psi[1]*h[i]

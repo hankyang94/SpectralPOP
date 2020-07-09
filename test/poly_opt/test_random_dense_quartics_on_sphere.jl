@@ -2,7 +2,7 @@ using DynamicPolynomials
 using SpectralPOP
 
 
-function test_random_dense_quadratic_on_sphere(n::Int64)
+function test_random_dense_quartics_on_sphere(n::Int64)
 
 
     println("***Problem setting***")
@@ -11,24 +11,24 @@ function test_random_dense_quadratic_on_sphere(n::Int64)
     println("Number of variable: n=",n)
     println("====================")
 
-    @polyvar x[1:n] #variables
+    @polyvar x[1:n]# variables
 
-
-    v=reverse(monomials(x,0:2))
+    # random quadratic objective function f
+    v=reverse(monomials(x,0:4))
     c=2*rand(Float64,length(v)).-1
-    f= c'*v #objective function
+    f=c'*v
 
 
-
+    # unit sphere constraint
     R=1.0
-    h=[R-sum(x.^2)] #sphere constraints
+    h=[R-sum(x.^2)] #type of coefficients of each polynomial must be float
 
-    l=length(h)
+    l_h=length(h)
 
-    println("Number of equality constraints: l=",l)
+    println("Number of equality constraints: l_h=",l_h)
     println("====================")
 
-    k=1 # relaxed order
+    k=Int64(2)
 
     println("Relaxed order: k=",k)
 
@@ -38,15 +38,15 @@ function test_random_dense_quadratic_on_sphere(n::Int64)
     println()
 
 
-    if n<=300
-        g=Vector{Polynomial{true,Float64}}([])
 
-        opt_val = SpectralPOP.SumofSquares_POP(x,f,g,h,k) # SumOfSquares.jl + Mosek
+    g=Vector{Polynomial{true,Float64}}([])
 
-        println()
-        println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
-        println()
-    end
+    opt_val = SpectralPOP.SumofSquares_POP(x,f,g,h,k) # SumOfSquares.jl + Mosek
+
+    println()
+    println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
+    println()
+
 
     opt_val,opt_sol = SpectralPOP.CTP_POP(x,f,h,k,R;method="LMBM",EigAlg="Arpack",tol=1e-5) #Limited memory bundle method
 
@@ -65,8 +65,8 @@ function test_random_dense_quadratic_on_sphere(n::Int64)
 end
 
 
-N=[50;75;100;125;150;175;200;250;300;350;400;500;700;900;1200;1500]
+N=[5;10;15;20;25;30]
 
 for n in N
-    test_random_dense_quadratic_on_sphere(n)
+    test_random_dense_quartics_on_sphere(n)
 end

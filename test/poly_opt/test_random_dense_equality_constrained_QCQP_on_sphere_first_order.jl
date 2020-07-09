@@ -2,36 +2,45 @@ using DynamicPolynomials
 using SpectralPOP
 
 
-function test_random_dense_quadratic_on_sphere(n::Int64)
+function test_random_dense_equality_constrained_QCQP_on_sphere_first_order(n::Int64)
 
 
     println("***Problem setting***")
 
+    l=ceil(Int32, n/4)
 
     println("Number of variable: n=",n)
     println("====================")
 
-    @polyvar x[1:n] #variables
+    @polyvar x[1:n]# variables
 
-
+    # random quadratic objective function f
     v=reverse(monomials(x,0:2))
     c=2*rand(Float64,length(v)).-1
-    f= c'*v #objective function
-
-
+    f=c'*v
 
     R=1.0
-    h=[R-sum(x.^2)] #sphere constraints
+    # unit sphere constraint
+    h=[R-sum(x.^2)] #type of coefficients of each polynomial must be float
 
-    l=length(h)
+    # random quadratic equality constraints
+    randx=2*rand(n).-1# create a feasible solution
+    randx=randx./sqrt(sum(randx.^2))
 
-    println("Number of equality constraints: l=",l)
+
+    for j in 1:l
+        a=2*rand(Float64,length(v[2:end])).-1
+        push!(h,a'*v[2:end])
+        h[end]-=h[end](x => randx) #make constraints feasible
+    end
+    l_h=length(h)
+
+    println("Number of equality constraints: l_h=",l_h)
     println("====================")
 
-    k=1 # relaxed order
+    k=Int64(1)
 
     println("Relaxed order: k=",k)
-
 
     println()
     println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
@@ -50,12 +59,13 @@ function test_random_dense_quadratic_on_sphere(n::Int64)
 
     opt_val,opt_sol = SpectralPOP.CTP_POP(x,f,h,k,R;method="LMBM",EigAlg="Arpack",tol=1e-5) #Limited memory bundle method
 
-    println()
-    println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
-    println()
+    if n<=70
+        println()
+        println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
+        println()
 
-    opt_val,opt_sol = SpectralPOP.CTP_POP(x,f,h,k,R;method="SketchyCGAL",EigAlg="Normal",tol=1e-3)
-
+        opt_val,opt_sol = SpectralPOP.CTP_POP(x,f,h,k,R;method="SketchyCGAL",EigAlg="Normal",tol=1e-3)
+    end
     println()
     println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
     println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
@@ -65,8 +75,8 @@ function test_random_dense_quadratic_on_sphere(n::Int64)
 end
 
 
-N=[50;75;100;125;150;175;200;250;300;350;400;500;700;900;1200;1500]
+N=[50;60;70;80;100;120;150;200;300;400]
 
 for n in N
-    test_random_dense_quadratic_on_sphere(n)
+    test_random_dense_quadratic_on_sphere_first_order(n)
 end

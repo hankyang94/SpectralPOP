@@ -21,7 +21,7 @@ by using spectral (the largest eigenvalue) minimization:
 
 with Limited memory bundle method instead of costly Interior-point methods.
 
-- Compared to SumOfSquares (Mosek) and SketchyCGAL, SpectralPOP is cheaper, faster, but maintains the same accuracy with SumOfSquares on a tested sample of random dense equality constrained QCQPs on the unit sphere. 
+- Compared to SumOfSquares (Mosek) and SketchyCGAL, SpectralPOP is cheaper, faster, but maintains the same accuracy with SumOfSquares on a tested sample of random dense equality constrained QCQPs on the unit sphere.
 
 # Required softwares
 SpectralPOP has been implemented on a desktop compute with the following softwares:
@@ -62,7 +62,7 @@ k=2 # relaxed order
 using SpectralPOP
 
 # get the optimal value and an optimal solution
-opt_val,opt_sol = CTP_POP(x,f,h,k,R,method="LMBM",EigAlg="Arpack",tol=1e-5) 
+opt_val,opt_sol = CTP_POP(x,f,h,k,R,method="LMBM",EigAlg="Arpack",tol=1e-5)
 ```
 Here:
 
@@ -96,4 +96,7 @@ root = ASC_PolySys(x,h,k,L,method="LMBM",EigAlg="Arpack",tol=1e-5)
 
 # References
 For more details, please refer to:
-1. N. H. A. Mai, J.-B. Lasserre, and V. Magron. A hierarchy of spectral relaxations for polynomial optimization, 2020. Forthcoming.
+
+N. H. A. Mai, J.-B. Lasserre, and V. Magron. A hierarchy of spectral relaxations for polynomial optimization, 2020. Forthcoming.
+
+(All numerical experiments of the paper are available in folder test/.)
