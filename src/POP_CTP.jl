@@ -152,7 +152,7 @@ function SpectralSDP(s::Int64,m::Int64,a0::Vector{Float64},a::SparseMatrixCSC{Fl
 
         b[Ib]=Vb
 
-        R = UInt16(10) # rank/sketch size parameter
+        R = UInt16(minimum([10;s])) # rank/sketch size parameter
         maxit = UInt64(1e6) # limit on number of iterations
 
         optval, U, Delt = CGAL(UInt32(s),Primitive1,Primitive2,Primitive3, cons, b, R, maxit,STOPTOL=tol,showEvaluation=showEvaluation,EigAlg=EigAlg)
