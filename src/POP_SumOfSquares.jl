@@ -7,7 +7,7 @@ function SumofSquares_POP(x::Vector{PolyVar{true}},f::Polynomial{true},g::Vector
 
 
 
-
+    sk=binomial(k+n,n)
     sk_g=[@inbounds binomial(k-ceil(Int64,maxdegree(g[i])/2)+n,n) for i in 1:l_g]
 
 
@@ -22,7 +22,7 @@ function SumofSquares_POP(x::Vector{PolyVar{true}},f::Polynomial{true},g::Vector
     psi_monos = reverse(monomials(x, 0:2*k))
 
 
-    @variable(model, sigma0, SOSPoly(psi_monos))
+    @variable(model, sigma0, SOSPoly(psi_monos[1:sk]))
     wsos-=sigma0
     for i in 1:l_g
         sigma= @variable(model,[1:1], SOSPoly(psi_monos[1:sk_g[i]]))
