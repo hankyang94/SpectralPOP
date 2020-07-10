@@ -1,6 +1,6 @@
 module SpectralPOP
 
-using DynamicPolynomials, LinearAlgebra, MosekTools, SparseArrays, JuMP, Arpack, RowEchelon, SumOfSquares, SemialgebraicSets, Libdl, Printf, Compat, OSQP
+using DynamicPolynomials, LinearAlgebra, MosekTools, SparseArrays, JuMP, Arpack, RowEchelon, SumOfSquares, Libdl, Printf, Compat, OSQP
 
 
 export CTP_POP, ASC_PolySys

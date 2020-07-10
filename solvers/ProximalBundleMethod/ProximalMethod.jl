@@ -34,7 +34,7 @@ mutable struct Model{T<:AbstractMethod}
 	function Model{T}(n::Int64, func,tol) where {T<:AbstractMethod}
 		bundle = new()
 		bundle.n = n
-		bundle.m = JuMP.Model(optimizer_with_attributes(OSQP.Optimizer,verbose=0))
+		bundle.m = JuMP.Model(with_optimizer(OSQP.Optimizer,verbose=0))
 		bundle.k = 0
 		bundle.maxiter = 500000
 		bundle.y = zeros(n)
