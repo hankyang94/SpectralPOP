@@ -56,28 +56,41 @@ function CTP_POP(x::Vector{PolyVar{true}},f::Polynomial{true,Float64},h::Vector{
             global norm_grad=Vector{Float64}([])
         end
         @time n,l,v,s,m,a0,a,Ib,Vb,invInde,invP = ConvertStandardSDP(x,f,h,k)
-        @time opt_val,z=SpectralSDP(s,m,a0,a,Ib,Vb,invInde,(R+1)^k,method=method,EigAlg=EigAlg,tol=tol,showNormGrad=showNormGrad,showEvaluation=showEvaluation)
+        @time opt_val,sol=SpectralSDP(s,m,a0,a,Ib,Vb,invInde,(R+1)^k,method=method,EigAlg=EigAlg,tol=tol,showNormGrad=showNormGrad,showEvaluation=showEvaluation)
 
         println("------------------------------------")
         println("**Numerical result:")
         println("====================================")
         println("opt_val=",opt_val)
         println("====================================")
-        @time opt_sol=ExtractionOptSol(n,l,v,s,a0,a,invInde,z,invP,opt_val,f,h,x,EigAlg=EigAlg,showEvaluation=showEvaluation)
+        if method=="LMBM" || method=="PB"
+            @time opt_sol=ExtractionOptSol(n,l,v,s,a0,a,invInde,sol,invP,opt_val,f,h,x,EigAlg=EigAlg,showEvaluation=showEvaluation)
+        elseif method=="SketchyCGAL"
+            invPmat=diagm(invP)
+            @time opt_sol=extract_optimizer_moment_matrix(invPmat*sol*invPmat,s,v,n,l,opt_val,f,h,x)
+        else
+            opt_sol=Vector{Float64}([])
+        end
+        
         if showNormGrad
+            println("----------------------------")
             println("norm_grad=",norm_grad)
+            println("----------------------------")
         end
         if showEvaluation
+            println("----------------------------")
             println("linear_oper=",linear_oper)
             println("adjoint_oper=",adjoint_oper)
             println("max_size=",max_size)
             println("num_eig=",num_eig)
+            println("----------------------------")
         end
     end
     return opt_val,opt_sol
 end
 
 function ExtractionOptSol(n::Int64,l::Int64,v::Matrix{UInt64},s::Int64,a0::Vector{Float64},a::SparseMatrixCSC{Float64},invInde::SparseMatrixCSC{UInt64},z::Vector{Float64},invP::Vector{Float64},opt_val::Float64,f::Polynomial{true,Float64},h::Vector{Polynomial{true,Float64}},x::Vector{PolyVar{true}};EigAlg="Arpack",showEvaluation=false)
+    
     P=diagm(invP.^-1)
     Gr=AdjOper(a0+a*z,invInde,s,showEvaluation=showEvaluation)
     eigval,eigvec=LargEig(Gr,s,EigAlg=EigAlg,showEvaluation=showEvaluation)
@@ -86,6 +99,7 @@ function ExtractionOptSol(n::Int64,l::Int64,v::Matrix{UInt64},s::Int64,a0::Vecto
     end
     Gr=P*Gr*P
     return extract_optimizer(Gr,s,v,n,l,opt_val,f,h,x)
+    
 end    
 
 function SpectralSDP(s::Int64,m::Int64,a0::Vector{Float64},a::SparseMatrixCSC{Float64},Ib::Vector{UInt64},Vb::Vector{Float64},invInde::SparseMatrixCSC{UInt64,Int64},CT::Float64;method="LMBM",EigAlg="Arpack",tol=1e-5,showNormGrad=false,showEvaluation=false)
@@ -141,10 +155,10 @@ function SpectralSDP(s::Int64,m::Int64,a0::Vector{Float64},a::SparseMatrixCSC{Fl
         maxit = UInt64(1e6) # limit on number of iterations
 
         optval, U, Delt = CGAL(UInt32(s),Primitive1,Primitive2,Primitive3, cons, b, R, maxit,STOPTOL=tol,showEvaluation=showEvaluation,EigAlg=EigAlg)
-        optsol=zeros(Float64,m)
+        optsol=U*Delt*U'
         return optval, optsol
     else 
-        println("No SDP method!")
+        println("No CTP-SDP method!")
     end
     
 end
