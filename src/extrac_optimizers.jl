@@ -1,14 +1,18 @@
+
+
 function extract_optimizer_moment_matrix(V::Matrix{Float64},lu0::Int64,basis_sigma0::Matrix{UInt64},n::Int64,l::Int64,opt_val::Float64,f::Polynomial{true},h::Vector{Polynomial{true,Float64}},x::Vector{PolyVar{true}})
     #extraction of optimizers by moment matrix
-
-    rk=rank(V,rtol=1e-3)
+    
+    V=rref_with_pivots!(Matrix(V'),1e-2)
+    U=Matrix(V[1]')
+    rk=size(U,2)
 
     println("Rank of moment matrix = ", rk)
+    
+    
     sol=Vector{Float64}[]
     if rk >0
         # extraction of Henrion and Lasserre
-        V= rref_with_pivots!(Matrix(V'),1e-2)
-        U=Matrix(V[1]')
 
         w=basis_sigma0[:,V[2]]
         N=Vector{Array{Float64}}(undef,n)
@@ -43,9 +47,11 @@ function extract_optimizer_moment_matrix(V::Matrix{Float64},lu0::Int64,basis_sig
         if flag==1
 
             # Create random convex combination
-            rands = rand(n,1);rands = rands/sum(rands)
+            rands = rand(n);rands = rands/sum(rands)
             M = zeros(length(V[2]),rk)
+            println(size(M))
             for i=1:n
+                println(size(N[i]))
                 @inbounds M+=rands[i]*N[i]
             end
 
@@ -107,7 +113,6 @@ function extract_optimizer(Gr::Matrix{Float64},lu0::Int64,basis_sigma0::Matrix{U
         # extraction of Henrion and Lasserre
         V= rref_with_pivots!(Matrix(V'),1e-2)
         U=Matrix(V[1]')
-
         w=basis_sigma0[:,V[2]]
         N=Vector{Array{Float64}}(undef,n)
         flag=UInt8(1)
@@ -141,7 +146,7 @@ function extract_optimizer(Gr::Matrix{Float64},lu0::Int64,basis_sigma0::Matrix{U
         if flag==1
 
             # Create random convex combination
-            rands = rand(n,1);rands = rands/sum(rands)
+            rands = rand(n);rands = rands/sum(rands)
             M = zeros(length(V[2]),rk)
             for i=1:n
                 @inbounds M+=rands[i]*N[i]
@@ -240,7 +245,7 @@ function extract_optimizer2(Gr::Matrix{Float64},lu0::Int64,basis_sigma0::Matrix{
         if flag==1
 
             # Create random convex combination
-            rands = rand(n,1);rands = rands/sum(rands)
+            rands = rand(n);rands = rands/sum(rands)
             M = zeros(length(V[2]),rk)
             for i=1:n
                 @inbounds M+=rands[i]*N[i]

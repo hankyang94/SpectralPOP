@@ -57,7 +57,8 @@ function CTP_POP(x::Vector{PolyVar{true}},f::Polynomial{true,Float64},h::Vector{
         end
         @time n,l,v,s,m,a0,a,Ib,Vb,invInde,invP = ConvertStandardSDP(x,f,h,k)
         @time opt_val,sol=SpectralSDP(s,m,a0,a,Ib,Vb,invInde,(R+1)^k,method=method,EigAlg=EigAlg,tol=tol,showNormGrad=showNormGrad,showEvaluation=showEvaluation)
-
+     
+        
         println("------------------------------------")
         println("**Numerical result:")
         println("====================================")
@@ -99,7 +100,7 @@ function ExtractionOptSol(n::Int64,l::Int64,v::Matrix{UInt64},s::Int64,a0::Vecto
     end
     Gr=P*Gr*P
     return extract_optimizer(Gr,s,v,n,l,opt_val,f,h,x)
-    
+ 
 end    
 
 function SpectralSDP(s::Int64,m::Int64,a0::Vector{Float64},a::SparseMatrixCSC{Float64},Ib::Vector{UInt64},Vb::Vector{Float64},invInde::SparseMatrixCSC{UInt64,Int64},CT::Float64;method="LMBM",EigAlg="Arpack",tol=1e-5,showNormGrad=false,showEvaluation=false)
@@ -156,6 +157,7 @@ function SpectralSDP(s::Int64,m::Int64,a0::Vector{Float64},a::SparseMatrixCSC{Fl
 
         optval, U, Delt = CGAL(UInt32(s),Primitive1,Primitive2,Primitive3, cons, b, R, maxit,STOPTOL=tol,showEvaluation=showEvaluation,EigAlg=EigAlg)
         optsol=U*Delt*U'
+        
         return optval, optsol
     else 
         println("No CTP-SDP method!")
