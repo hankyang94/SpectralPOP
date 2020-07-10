@@ -12,11 +12,26 @@ h=[R-sum(x.^2);(x[1]-1.0)*x[2]] # equality constraints (including the sphere con
 
 k=2 # relaxed order
 
+
+g=Vector{Polynomial{true,Float64}}([])
+opt_val = SpectralPOP.SumofSquares_POP(x,f,g,h,k) # SumOfSquares.jl + Mosek
+println()
+println(".................................")
+println()
 using SpectralPOP
 
 # get approximations of the optimal value and an optimal solution
-opt_val,opt_sol = CTP_POP(x,f,h,k,R,method="LMBM",EigAlg="Arpack",tol=1e-5)
+opt_val,opt_sol = CTP_POP(x,f,h,k,R,method="LMBM",EigAlg="Arpack",tol=1e-5)# Limited Memory Bundle Method
+println()
+println(".................................")
+println()
+opt_val,opt_sol = CTP_POP(x,f,h,k,R,method="SketchyCGAL",EigAlg="Normal",tol=1e-3)# Limited Memory Bundle Method
 
+println()
+println()
+println()
+println()
+println()
 
 println("****Test polynomial system****")
 
