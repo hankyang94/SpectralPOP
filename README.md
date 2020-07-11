@@ -69,7 +69,7 @@ Here:
 
 - ```method="LMBM"```: [Limited memory bundle method](https://github.com/maihoanganh/LMBMinterface) (solver of spectral minimization). You can also choose ```method="PB"``` ([Proximal bundle method](https://github.com/maihoanganh/ProximalBundleMethod)) or ```method="SketchyCGAL"```.
 
-- ```EigAlg="Arpack"```: [Arpack package](https://github.com/JuliaLinearAlgebra/Arpack.jl) (of computing the largest eigenvalue). You can also choose ```EigAlg="Normal"``` to use essential function of computing eigenvalue in Julia or ```EigAlg="Mix"``` to use the combination of the two methods.
+- ```EigAlg="Arpack"```: [Arpack package](https://github.com/JuliaLinearAlgebra/Arpack.jl) (to compute the largest eigenvalue). You can also choose ```EigAlg="Normal"``` to use essential function of computing eigenvalues in Julia or ```EigAlg="Mix"``` to use the combination of the two methods.
 
 - ```tol=1e-5```: the precision of the solver for spectral minimization.
 
