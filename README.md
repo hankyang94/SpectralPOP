@@ -71,7 +71,7 @@ Here:
 
 - ```EigAlg="Arpack"```: [Arpack package](https://github.com/JuliaLinearAlgebra/Arpack.jl) (of computing the largest eigenvalue). You can also choose ```EigAlg="Normal"``` to use essential function of computing eigenvalue in Julia or ```EigAlg="Mix"``` to use the combination of the two methods.
 
-- ```tol=1e-5```: the precision of the solver of spectral minimization.
+- ```tol=1e-5```: the precision of the solver for spectral minimization.
 
 See other options in the [link](https://github.com/maihoanganh/SpectralPOP/blob/master/examples/test_random_dense_quadratic_on_sphere.ipynb).
 
