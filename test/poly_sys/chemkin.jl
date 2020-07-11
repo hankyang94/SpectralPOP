@@ -9,7 +9,7 @@ using DynamicPolynomials
 x=[x3; x4; y2; y3; y4; y5; z2; z3; z4; z5]
 
 
-#chemkin
+println("chemkin")
 
 h=[9*y2^2 - 5.656854249492381*y2 + z2;
 x3^2 + y3^2 + z3^2 - 1;

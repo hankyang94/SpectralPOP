@@ -9,7 +9,7 @@ using DynamicPolynomials
 x=[s1;s2;s3;s4;s5;s6;c1;c2;c3;c4;c5;c6]
 
 
-#kin1
+println("kin1")
 
 h=[s1^2 + c1^2 - 1;
  s2^2 + c2^2 - 1;

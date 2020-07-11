@@ -4,7 +4,7 @@ using DynamicPolynomials
 @polyvar x1 x2 x3 x4 x5 x6 x7 x8 x9 # variables
 x=[x1;x2;x3;x4;x5;x6;x7;x8;x9]
 
-#katsura8
+println("katsura8")
 
 h=[-x1+2*x9^2+2*x8^2+2*x7^2+2*x6^2+2*x5^2+2*x4^2+2*x3^2+2*x2^2+x1^2;
  -x2+2*x9*x8+2*x8*x7+2*x7*x6+2*x6*x5+2*x5*x4+2*x4*x3+2*x3*x2+2*x2*x1;

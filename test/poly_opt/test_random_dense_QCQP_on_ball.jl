@@ -2,7 +2,7 @@ using DynamicPolynomials
 using SpectralPOP
 
 
-function test_random_dense_QCQP_on_ball(n::Int64)
+function test(n::Int64)
 
     println("***Problem setting***")
 
@@ -14,46 +14,57 @@ function test_random_dense_QCQP_on_ball(n::Int64)
 
     @polyvar x[1:n]# variables
 
-
-
-    # random quadratic objective function f
-    v=reverse(monomials(x,0:2))
-    c=2*rand(Float64,length(v)).-1
-    f=c'*v
-
-
-    # unit sphere constraint
+    function generate_random_poly(v::Vector{Monomial{true}})
+        c=2*rand(Float64,length(v)).-1
+        return c'*v
+    end
+    
+    
     R=1.0
-    g=[R-sum(x.^2)] #type of coefficients of each polynomial must be float
+    
+    function generate_objective_and_constraints(x)
+        # random quadratic objective function f
+        v=reverse(monomials(x,0:2))
+        f=generate_random_poly(v)
+
+
+        # unit sphere constraint
 
 
 
-    # random quadratic equality constraints
-    randx=2*rand(n).-1# create a feasible solution
-    randx=randx./sqrt(sum(randx.^2))
-    randx=randx.*rand(1)
+        g=[R-sum(x.^2)] #type of coefficients of each polynomial must be float
 
-    for j in 1:l_g-1
-        a=2*rand(Float64,length(v[2:end])).-1
-        push!(g,a'*v[2:end])
-        g[end]-=g[end](x => randx)#make constraints feasible
-        g[end]+=rand(1)[1]
+
+
+        # random quadratic equality constraints
+        randx=2*rand(n).-1# create a feasible solution
+        randx=randx./sqrt(sum(randx.^2))
+        randx=randx.*rand(1)
+
+        for j in 1:l_g-1
+      
+            push!(g,generate_random_poly(v[2:end]))
+            g[end]-=g[end](x => randx)#make constraints feasible
+            g[end]+=rand(1)[1]
+        end
+        #g=Polynomial{true,Float64}[]
+        l_g=length(g)
+        println("Number of inequality constraints: l_g=",l_g)
+        println("====================")
+
+        h=Polynomial{true,Float64}[]
+        for j in 1:l_h
+            push!(h,generate_random_poly(v[2:end]))
+            h[end]-=h[end](x => randx) #make constraints feasible
+        end
+        l_h=length(h)
+
+        println("Number of equality constraints: l_h=",l_h)
+        println("====================")
+        return f,g,h
     end
-    #g=Polynomial{true,Float64}[]
-    l_g=length(g)
-    println("Number of inequality constraints: l_g=",l_g)
-    println("====================")
-
-    h=Polynomial{true,Float64}[]
-    for j in 1:l_h
-        a=2*rand(Float64,length(v[2:end])).-1
-        push!(h,a'*v[2:end])
-        h[end]-=h[end](x => randx) #make constraints feasible
-    end
-    l_h=length(h)
-
-    println("Number of equality constraints: l_h=",l_h)
-    println("====================")
+    
+    f,g,h=generate_objective_and_constraints(x)
 
     k=2
 
@@ -94,5 +105,5 @@ end
 N=[10;15;20;25;30;35]
 
 for n in N
-    test_random_dense_QCQP_on_ball(n)
+    test(n)
 end

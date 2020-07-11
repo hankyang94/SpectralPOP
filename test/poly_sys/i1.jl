@@ -9,7 +9,7 @@ using DynamicPolynomials
 x=[x1;x2;x3;x4;x5;x6;x7;x8;x9;x10]
 
 
-#i1
+println("i1")
 
 h=[x1 - 0.25428722 - 0.18324757*x4*x3*x9;
  x2 - 0.37842197 - 0.16275449*x1*x10*x6;

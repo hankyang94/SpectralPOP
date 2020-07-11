@@ -2,7 +2,7 @@ using DynamicPolynomials
 using SpectralPOP
 
 
-function test_random_dense_quadratic_on_sphere(n::Int64)
+function test(n::Int64)
 
 
     println("***Problem setting***")
@@ -13,21 +13,32 @@ function test_random_dense_quadratic_on_sphere(n::Int64)
 
     @polyvar x[1:n] #variables
 
-
-    v=reverse(monomials(x,0:2))
-    c=2*rand(Float64,length(v)).-1
-    f= c'*v #objective function
-
-
+    
+    function generate_random_poly(v::Vector{Monomial{true}})
+        c=2*rand(Float64,length(v)).-1
+        return c'*v
+    end
 
     R=1.0
-    h=[R-sum(x.^2)] #sphere constraints
+    
+    function generate_objective_and_constraint(x)
+        v=reverse(monomials(x,0:2))
+        f=generate_random_poly(v) #objective function
 
-    l=length(h)
 
-    println("Number of equality constraints: l=",l)
-    println("====================")
 
+
+        h=[R-sum(x.^2)] #sphere constraints
+
+        l=length(h)
+
+        println("Number of equality constraints: l=",l)
+        println("====================")
+        return f,h
+    end
+    
+    f,h=generate_objective_and_constraint(x)
+    
     k=1 # relaxed order
 
     println("Relaxed order: k=",k)
@@ -68,5 +79,5 @@ end
 N=[50;75;100;125;150;175;200;250;300;350;400;500;700;900;1200;1500]
 
 for n in N
-    test_random_dense_quadratic_on_sphere(n)
+    test(n)
 end

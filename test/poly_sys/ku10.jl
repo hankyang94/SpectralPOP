@@ -9,7 +9,7 @@ using DynamicPolynomials
 x=[x1;x2;x3;x4;x5;x6;x7;x8;x9;x10]
 
 
-#ku10
+println("ku10")
 
 h=[5*x1*x2+ 5*x1+ 3*x2+ 55;
  7*x2*x3+ 9*x2+ 9*x3+ 19;

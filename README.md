@@ -1,5 +1,5 @@
 # SpectralPOP
-- SpectralPOP is a Julia package of solving equality constrained polynomial optimization problems on a Euclidean sphere:
+- SpectralPOP is a Julia package of solving equality constrained polynomial optimization problems (POPs) on a Euclidean sphere:
 
 **inf_x { f(x) : x in R^n, hj(x) = 0, j = 1,...,l } with h1 := R - |x|^2,**
 
@@ -47,6 +47,7 @@ Pkg> add https://github.com/maihoanganh/SpectralPOP.git
 The following examples briefly guide to use SpectralPOP (see more examples in files test/test_....ipynb):
 
 ## Polynomial optimization
+Consider an equality constrained POP on the unit sphere as follows:
 ```ruby
 using DynamicPolynomials
 
@@ -68,11 +69,15 @@ Here:
 
 - ```method="LMBM"```: [Limited memory bundle method](https://github.com/maihoanganh/LMBMinterface) (solver of spectral minimization). You can also choose ```method="PB"``` ([Proximal bundle method](https://github.com/maihoanganh/ProximalBundleMethod)) or ```method="SketchyCGAL"```.
 
-- ```EigAlg="Arpack"```: [Arpack package](https://github.com/JuliaLinearAlgebra/Arpack.jl) (of computing the largest eigenvalue). You can also choose ```EigAlg="Normal"``` to use essential function of computing eigenvalue in Julia or ```method="Mix"``` to use the combination of the two methods.
+- ```EigAlg="Arpack"```: [Arpack package](https://github.com/JuliaLinearAlgebra/Arpack.jl) (of computing the largest eigenvalue). You can also choose ```EigAlg="Normal"``` to use essential function of computing eigenvalue in Julia or ```EigAlg="Mix"``` to use the combination of the two methods.
 
 - ```tol=1e-5```: the precision of the solver of spectral minimization.
 
 See other options in the [link](https://github.com/maihoanganh/SpectralPOP/blob/master/examples/test_random_dense_quadratic_on_sphere.ipynb).
+
+To solve other types of POP, see the links below:
+- [Constrained POPs with single inequality (ball) constraint](https://github.com/maihoanganh/SpectralPOP/blob/master/examples/test_random_dense_QCQP_unique_inequality_(ball)_constraint.ipynb);
+- [Constrained POPs on a ball](https://github.com/maihoanganh/SpectralPOP/blob/master/examples/test_random_dense_QCQP_on_ball.ipynb).
 
 ## Squared systems of polynomial equations
 
@@ -99,4 +104,33 @@ For more details, please refer to:
 
 N. H. A. Mai, J.-B. Lasserre, and V. Magron. A hierarchy of spectral relaxations for polynomial optimization, 2020. Forthcoming.
 
-(All numerical experiments of the paper are available in folder test/.)
+The following codes are to run the paper's benchmarks:
+```ruby
+using SpectralPOP
+
+# Polynomial optimization
+SpectralPOP.test_random_dense_quadratic_on_sphere() # Table 2
+SpectralPOP.test_random_dense_equality_constrained_QCQP_on_sphere_first_order() # Table 3
+SpectralPOP.test_random_dense_equality_constrained_QCQP_on_sphere_second_order() # Table 4 and Table 5
+SpectralPOP.Evaluation_comparisons() # Table 6
+SpectralPOP.test_random_dense_QCQP_unique_inequality_ball_constraint() # Table 7
+SpectralPOP.test_random_dense_QCQP_on_ball() # Table 8
+SpectralPOP.Norm_Subgrad() # Table 9
+SpectralPOP.test_random_dense_quartics_on_sphere() # Table 10
+
+# Polynomial systems (Table 11)
+SpectralPOP.test_chemkin()
+SpectralPOP.test_d1()
+SpectralPOP.test_des22_24()
+SpectralPOP.test_i1()
+SpectralPOP.test_katsura10()
+SpectralPOP.test_katsura9()
+SpectralPOP.test_katsura8()
+SpectralPOP.test_katsura7()
+SpectralPOP.test_katsura6()
+SpectralPOP.test_kin1()
+SpectralPOP.test_ku10()
+SpectralPOP.test_pole27sys()
+SpectralPOP.test_pole28sys()
+SpectralPOP.test_stewgou()
+```

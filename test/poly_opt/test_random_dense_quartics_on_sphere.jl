@@ -2,7 +2,7 @@ using DynamicPolynomials
 using SpectralPOP
 
 
-function test_random_dense_quartics_on_sphere(n::Int64)
+function test(n::Int64)
 
 
     println("***Problem setting***")
@@ -12,22 +12,33 @@ function test_random_dense_quartics_on_sphere(n::Int64)
     println("====================")
 
     @polyvar x[1:n]# variables
-
-    # random quadratic objective function f
-    v=reverse(monomials(x,0:4))
-    c=2*rand(Float64,length(v)).-1
-    f=c'*v
-
-
-    # unit sphere constraint
     R=1.0
-    h=[R-sum(x.^2)] #type of coefficients of each polynomial must be float
+    
+    
+    function generate_random_poly(v::Vector{Monomial{true}})
+        c=2*rand(Float64,length(v)).-1
+        return c'*v
+    end
 
-    l_h=length(h)
+    
+    function generate_objective_and_constraints(x)
+        # random quadratic objective function f
+        v=reverse(monomials(x,0:4))
+        f=generate_random_poly(v)
 
-    println("Number of equality constraints: l_h=",l_h)
-    println("====================")
 
+        # unit sphere constraint
+
+        h=[R-sum(x.^2)] #type of coefficients of each polynomial must be float
+
+        l_h=length(h)
+
+        println("Number of equality constraints: l_h=",l_h)
+        println("====================")
+        return f,h
+    end
+    
+    f,h=generate_objective_and_constraints(x)
     k=Int64(2)
 
     println("Relaxed order: k=",k)
@@ -68,5 +79,5 @@ end
 N=[5;10;15;20;25;30]
 
 for n in N
-    test_random_dense_quartics_on_sphere(n)
+    test(n)
 end

@@ -23,4 +23,6 @@ include("extrac_optimizers.jl")
 include("POP_SumOfSquares.jl")
 include("SpectralASC_PolynomialSystems.jl")
 
+include("../test/runtests.jl")
+
 end

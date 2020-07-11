@@ -1,53 +1,28 @@
-
-println("****Test polynomial optimization****")
-
-using DynamicPolynomials
-
-@polyvar x[1:2] # variables
-
-f=x[1]^2+0.5*x[1]*x[2]-0.25*x[2]^2+0.75*x[1]-0.3*x[2] # objective function
-
-R=1.0 # squared radius of a sphere constraint
-h=[R-sum(x.^2);(x[1]-1.0)*x[2]] # equality constraints (including the sphere constraint)
-
-k=2 # relaxed order
-
-using SpectralPOP
-
-g=Vector{Polynomial{true,Float64}}([])
-opt_val = SpectralPOP.SumofSquares_POP_WithExtraction(x,f,g,h,k) # SumOfSquares.jl + Mosek
-println()
-println(".................................")
-println()
+test_examples()=include("./test_examples.jl")
 
 
-# get approximations of the optimal value and an optimal solution
-opt_val,opt_sol = CTP_POP(x,f,h,k,R,method="LMBM",EigAlg="Arpack",tol=1e-5)# Limited Memory Bundle Method
-println()
-println(".................................")
-println()
-opt_val,opt_sol = CTP_POP(x,f,h,k,R,method="SketchyCGAL",EigAlg="Normal",tol=1e-3)# Limited Memory Bundle Method
+#Polynomial optimization
+test_random_dense_quadratic_on_sphere()=include("./poly_opt/test_random_dense_quadratic_on_sphere.jl")
+test_random_dense_equality_constrained_QCQP_on_sphere_first_order()=include("./poly_opt/test_random_dense_equality_constrained_QCQP_on_sphere_first_order.jl")
+test_random_dense_equality_constrained_QCQP_on_sphere_second_order()=include("./poly_opt/test_random_dense_equality_constrained_QCQP_on_sphere_second_order.jl")
+test_random_dense_QCQP_unique_inequality_ball_constraint()=include("./poly_opt/test_random_dense_QCQP_unique_inequality_(ball)_constraint.jl")
+test_random_dense_QCQP_on_ball()=include("./poly_opt/test_random_dense_QCQP_on_ball.jl")
+test_random_dense_quartics_on_sphere()=include("./poly_opt/test_random_dense_quartics_on_sphere.jl")
+Evaluation_comparisons()=include("./poly_opt/Evaluation_comparisons.jl")
+Norm_Subgrad()=include("./poly_opt/Norm_Subgrad.jl")
 
-println()
-println()
-println()
-println()
-println()
-
-println("****Test polynomial system****")
-
-using DynamicPolynomials
-
-@polyvar x[1:2] # variables
-
-# mickey equations
-h=[x[1]^2 + 4*x[2]^2 - 4;
-        2*x[2]^2 - x[1]]
-
-L=10 # squared radius of a ball centered at origin containing at least one real root
-k=1 # relaxed order
-
-using SpectralPOP
-
-# get a real root
-root = ASC_PolySys(x,h,k,L,method="LMBM",EigAlg="Arpack",tol=1e-5)
+#Polynomial systems
+test_chemkin()=include("./poly_sys/chemkin.jl")
+test_d1()=include("./poly_sys/d1.jl")
+test_des22_24()=include("./poly_sys/des22_24.jl")
+test_i1()=include("./poly_sys/i1.jl")
+test_katsura10()=include("./poly_sys/katsura10.jl")
+test_katsura9()=include("./poly_sys/katsura9.jl")
+test_katsura8()=include("./poly_sys/katsura8.jl")
+test_katsura7()=include("./poly_sys/katsura7.jl")
+test_katsura6()=include("./poly_sys/katsura6.jl")
+test_kin1()=include("./poly_sys/kin1.jl")
+test_ku10()=include("./poly_sys/ku10.jl")
+test_pole27sys()=include("./poly_sys/pole27sys.jl")
+test_pole28sys()=include("./poly_sys/pole28sys.jl")
+test_stewgou()=include("./poly_sys/stewgou.jl")

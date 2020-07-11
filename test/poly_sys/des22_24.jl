@@ -9,7 +9,7 @@ using DynamicPolynomials
 x=[a20;a21;a22;a23;a30;a31;a32;a33;a34;a35]
 
 
-#des22_24
+println("des22_24")
 
 h=[16*a20*a32 + 18*a21*a31 + 20*a22*a30;
 -80*a23 + 180*a34 + 855*a35;
