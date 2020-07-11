@@ -3,8 +3,6 @@ solving systems of polynomial equations
 """
 
 function test_chemkin()
-using DynamicPolynomials
-
 
 @polyvar x3 x4 y2 y3 y4 y5 z2 z3 z4 z5# variables
 x=[x3; x4; y2; y3; y4; y5; z2; z3; z4; z5]
@@ -25,9 +23,6 @@ z2 + z3 + z4 + z5]
 
 L=1e4 # Squared radius of a ball containing at least one real root
 k=2 # relaxed order
-
-
-using SpectralPOP
 
 sol=SpectralPOP.ASC_PolySys(x,h,k,L,method="LMBM",EigAlg="Arpack",tol=1e-3);
 end

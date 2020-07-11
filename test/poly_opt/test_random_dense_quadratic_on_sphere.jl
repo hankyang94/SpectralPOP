@@ -1,6 +1,4 @@
 function test_random_dense_quadratic_on_sphere()
-using DynamicPolynomials
-using SpectralPOP
 
 
 function test(n::Int64)

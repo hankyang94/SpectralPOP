@@ -2,8 +2,6 @@ function test_examples()
 
 println("****Test polynomial optimization****")
 
-using DynamicPolynomials
-
 @polyvar x[1:2] # variables
 
 f=x[1]^2+0.5*x[1]*x[2]-0.25*x[2]^2+0.75*x[1]-0.3*x[2] # objective function
@@ -13,7 +11,6 @@ h=[R-sum(x.^2);(x[1]-1.0)*x[2]] # equality constraints (including the sphere con
 
 k=2 # relaxed order
 
-using SpectralPOP
 
 g=Vector{Polynomial{true,Float64}}([])
 opt_val = SpectralPOP.SumofSquares_POP_WithExtraction(x,f,g,h,k) # SumOfSquares.jl + Mosek
@@ -37,7 +34,6 @@ println()
 
 println("****Test polynomial system****")
 
-using DynamicPolynomials
 
 @polyvar x[1:2] # variables
 
@@ -47,8 +43,6 @@ h=[x[1]^2 + 4*x[2]^2 - 4;
 
 L=10 # squared radius of a ball centered at origin containing at least one real root
 k=1 # relaxed order
-
-using SpectralPOP
 
 # get a real root
 root = ASC_PolySys(x,h,k,L,method="LMBM",EigAlg="Arpack",tol=1e-5)

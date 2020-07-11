@@ -3,7 +3,6 @@ solving systems of polynomial equations
 """
 
 function test_des22_24()
-using DynamicPolynomials
 
 
 @polyvar a20 a21 a22 a23 a30 a31 a32 a33 a34 a35 u# variables
@@ -26,8 +25,6 @@ h=[16*a20*a32 + 18*a21*a31 + 20*a22*a30;
 L=1e4 # Squared radius of a ball containing at least one real root
 k=3 # relaxed order
 
-
-using SpectralPOP
 
 sol=SpectralPOP.ASC_PolySys(x,h,k,L,method="LMBM",EigAlg="Arpack",tol=1e-3);
 end

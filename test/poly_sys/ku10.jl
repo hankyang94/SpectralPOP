@@ -3,8 +3,6 @@ solving systems of polynomial equations
 """
 
 function test_ku10()
-using DynamicPolynomials
-
 
 
 @polyvar x1 x2 x3 x4 x5 x6 x7 x8 x9 x10 # variables
@@ -28,7 +26,6 @@ L=1e4 # Squared radius of a ball containing at least one real root
 k=1 # relaxed order
 
 
-using SpectralPOP
 
 sol=SpectralPOP.ASC_PolySys(x,h,k,L,method="LMBM",EigAlg="Arpack",tol=1e-3);
 end

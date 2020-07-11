@@ -1,7 +1,5 @@
 function test_random_dense_equality_constrained_QCQP_on_sphere_first_order()
 
-using DynamicPolynomials
-using SpectralPOP
 
 
 function test(n::Int64)

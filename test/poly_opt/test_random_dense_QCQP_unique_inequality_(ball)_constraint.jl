@@ -1,7 +1,4 @@
 function test_random_dense_QCQP_unique_inequality_ball_constraint()
-using DynamicPolynomials
-using SpectralPOP
-
 
 function test(n::Int64)
 

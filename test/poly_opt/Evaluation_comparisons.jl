@@ -1,7 +1,6 @@
 function Evaluation_comparisons()
 
-using DynamicPolynomials
-using SpectralPOP
+
 
 
 function test(n::Int64)

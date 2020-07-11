@@ -1,8 +1,5 @@
 function test_random_dense_QCQP_on_ball()
 
-using DynamicPolynomials
-using SpectralPOP
-
 
 function test(n::Int64)
 

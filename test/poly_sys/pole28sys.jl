@@ -4,8 +4,6 @@ solving systems of polynomial equations
 
 function test_pole28sys()
 
-using DynamicPolynomials
-
 
 @polyvar x11 x12 x13 x14 x15 x16 x17 x18 x21 x22 x23 x24 x25 x26 x27 x28 # variables
 x=[x11; x12; x13; x14; x15; x16; x17;x18; x21; x22; x23; x24; x25; x26; x27;x28]
@@ -419,7 +417,6 @@ L=1e4 # Squared radius of a ball containing at least one real root
 k=1 # relaxed order
 
 
-using SpectralPOP
 
 sol=SpectralPOP.ASC_PolySys(x,h,k,L,method="LMBM",EigAlg="Arpack",tol=1e-3);
 end

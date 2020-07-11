@@ -4,8 +4,6 @@ solving systems of polynomial equations
 
 
 function test_kin1()
-using DynamicPolynomials
-
 
 @polyvar s1 s2 s3 s4 s5 s6 c1 c2 c3 c4 c5 c6 # variables
 x=[s1;s2;s3;s4;s5;s6;c1;c2;c3;c4;c5;c6]
@@ -28,9 +26,6 @@ h=[s1^2 + c1^2 - 1;
 
 L=1e4 # Squared radius of a ball containing at least one real root
 k=2 # relaxed order
-
-include("../src/SpectralPOP.jl")
-using .SpectralPOP
 
 sol=SpectralPOP.ASC_PolySys(x,h,k,L,method="LMBM",EigAlg="Arpack",tol=1e-3);
 end
