@@ -2,6 +2,7 @@
 solving systems of polynomial equations
 """
 
+function test_i1()
 using DynamicPolynomials
 
 
@@ -29,3 +30,4 @@ k=3 # relaxed order
 using SpectralPOP
 
 sol=SpectralPOP.ASC_PolySys(x,h,k,L,method="LMBM",EigAlg="Arpack",tol=1e-3);
+end

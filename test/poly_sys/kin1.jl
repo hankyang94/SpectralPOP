@@ -2,6 +2,8 @@
 solving systems of polynomial equations
 """
 
+
+function test_kin1()
 using DynamicPolynomials
 
 
@@ -31,3 +33,4 @@ include("../src/SpectralPOP.jl")
 using .SpectralPOP
 
 sol=SpectralPOP.ASC_PolySys(x,h,k,L,method="LMBM",EigAlg="Arpack",tol=1e-3);
+end

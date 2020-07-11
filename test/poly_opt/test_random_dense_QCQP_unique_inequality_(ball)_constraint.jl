@@ -1,3 +1,4 @@
+function test_random_dense_QCQP_unique_inequality_ball_constraint()
 using DynamicPolynomials
 using SpectralPOP
 
@@ -92,4 +93,5 @@ N=[5;10;15;20;25;30;35;40;45;50]
 
 for n in N
     test(n)
+end
 end

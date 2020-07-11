@@ -1,3 +1,5 @@
+function test_random_dense_quartics_on_sphere()
+
 using DynamicPolynomials
 using SpectralPOP
 
@@ -80,4 +82,5 @@ N=[5;10;15;20;25;30]
 
 for n in N
     test(n)
+end
 end

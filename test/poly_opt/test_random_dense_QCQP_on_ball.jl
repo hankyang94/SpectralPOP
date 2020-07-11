@@ -1,3 +1,5 @@
+function test_random_dense_QCQP_on_ball()
+
 using DynamicPolynomials
 using SpectralPOP
 
@@ -106,4 +108,5 @@ N=[10;15;20;25;30;35]
 
 for n in N
     test(n)
+end
 end

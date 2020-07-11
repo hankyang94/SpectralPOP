@@ -1,3 +1,4 @@
+function test_random_dense_quadratic_on_sphere()
 using DynamicPolynomials
 using SpectralPOP
 
@@ -80,4 +81,5 @@ N=[50;75;100;125;150;175;200;250;300;350;400;500;700;900;1200;1500]
 
 for n in N
     test(n)
+end
 end

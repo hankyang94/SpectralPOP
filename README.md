@@ -75,7 +75,7 @@ Here:
 
 See other options in the [link](https://github.com/maihoanganh/SpectralPOP/blob/master/examples/test_random_dense_quadratic_on_sphere.ipynb).
 
-To solve other types of POP, see the links below:
+To solve other types of POPs, see the links below:
 - [Constrained POPs with single inequality (ball) constraint](https://github.com/maihoanganh/SpectralPOP/blob/master/examples/test_random_dense_QCQP_unique_inequality_(ball)_constraint.ipynb);
 - [Constrained POPs on a ball](https://github.com/maihoanganh/SpectralPOP/blob/master/examples/test_random_dense_QCQP_on_ball.ipynb).
 
@@ -111,7 +111,7 @@ using SpectralPOP
 # Polynomial optimization
 SpectralPOP.test_random_dense_quadratic_on_sphere() # Table 2
 SpectralPOP.test_random_dense_equality_constrained_QCQP_on_sphere_first_order() # Table 3
-SpectralPOP.test_random_dense_equality_constrained_QCQP_on_sphere_second_order() # Table 4 and Table 5
+SpectralPOP.test_random_dense_equality_constrained_QCQP_on_sphere_second_order() # Table 4 and 5
 SpectralPOP.Evaluation_comparisons() # Table 6
 SpectralPOP.test_random_dense_QCQP_unique_inequality_ball_constraint() # Table 7
 SpectralPOP.test_random_dense_QCQP_on_ball() # Table 8

@@ -1,3 +1,5 @@
+function test_random_dense_equality_constrained_QCQP_on_sphere_second_order()
+
 using DynamicPolynomials
 using SpectralPOP
 
@@ -90,4 +92,5 @@ N=[5;10;15;20;25;30;35;40;45;50;55;60;65]
 
 for n in N
     test(n)
+end
 end

@@ -1,3 +1,5 @@
+function test_random_dense_equality_constrained_QCQP_on_sphere_first_order()
+
 using DynamicPolynomials
 using SpectralPOP
 
@@ -90,4 +92,5 @@ N=[50;60;70;80;100;120;150;200;300;400;500]
 
 for n in N
     test(n)
+end
 end

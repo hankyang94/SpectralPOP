@@ -1,3 +1,6 @@
+function test_stewgou()
+
+
 using DynamicPolynomials
 
 
@@ -23,3 +26,4 @@ k=2 # relaxed order
 using SpectralPOP
 
 sol=SpectralPOP.ASC_PolySys(x,h,k,L,method="LMBM",EigAlg="Arpack",tol=1e-3);
+end

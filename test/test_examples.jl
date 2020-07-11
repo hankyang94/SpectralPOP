@@ -1,3 +1,5 @@
+function test_examples()
+
 println("****Test polynomial optimization****")
 
 using DynamicPolynomials
@@ -50,3 +52,4 @@ using SpectralPOP
 
 # get a real root
 root = ASC_PolySys(x,h,k,L,method="LMBM",EigAlg="Arpack",tol=1e-5)
+end

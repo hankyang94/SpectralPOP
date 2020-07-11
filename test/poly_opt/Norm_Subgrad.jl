@@ -1,3 +1,5 @@
+function Norm_Subgrad()
+
 println("***POP with single inequality (ball) constraint***")
 
 n=10
@@ -129,3 +131,4 @@ println()
 
 
 opt_val,opt_sol = SpectralPOP.CTP_POP_on_Ball(x,f,g,h,k,R,showNormGrad=true)
+end

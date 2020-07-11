@@ -1,3 +1,5 @@
+function Evaluation_comparisons()
+
 using DynamicPolynomials
 using SpectralPOP
 
@@ -81,4 +83,5 @@ N=[5;10;15;20;25]
 
 for n in N
     test(n)
+end
 end
