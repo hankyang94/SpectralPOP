@@ -1,5 +1,5 @@
 # SpectralPOP
-- SpectralPOP is a Julia package of solving equality constrained polynomial optimization problems (POPs) on a Euclidean sphere:
+- SpectralPOP is a Julia package of solving equality constrained polynomial optimization problems (POPs) on an Euclidean sphere:
 
 **inf_x { f(x) : x in R^n, hj(x) = 0, j = 1,...,l } with h1 := R - |x|^2,**
 
