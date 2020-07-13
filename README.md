@@ -104,7 +104,7 @@ For more details, please refer to:
 
 **N. H. A. Mai, J.-B. Lasserre, and V. Magron. A hierarchy of spectral relaxations for polynomial optimization, 2020. Forthcoming.**
 
-The following codes are to run the paper's benchmarks:
+The following commands allow one to reproduce the paper's benchmarks:
 ```ruby
 using SpectralPOP
 
