@@ -67,9 +67,9 @@ opt_val,opt_sol = CTP_POP(x,f,h,k,R,method="LMBM",EigAlg="Arpack",tol=1e-5)
 ```
 Here:
 
-- ```method="LMBM"```: [Limited memory bundle method](https://github.com/maihoanganh/LMBMinterface) (solver of spectral minimization). You can also choose ```method="PB"``` ([Proximal bundle method](https://github.com/maihoanganh/ProximalBundleMethod)) or ```method="SketchyCGAL"```.
+- ```method="LMBM"```: [Limited memory bundle method](https://github.com/maihoanganh/LMBMinterface) (solver of spectral minimization). You can also choose ```method="PB"``` ([Proximal bundle method](https://github.com/maihoanganh/ProximalBundleMethod)) or ```method="SketchyCGAL"```. In these slovers, LMBM is the fastest one while PB provides the most accurate output.
 
-- ```EigAlg="Arpack"```: [Arpack package](https://github.com/JuliaLinearAlgebra/Arpack.jl) (to compute the largest eigenvalue). You can also choose ```EigAlg="Normal"``` to use essential function of computing eigenvalues in Julia or ```EigAlg="Mix"``` to use the combination of the two methods.
+- ```EigAlg="Arpack"```: [Arpack package](https://github.com/JuliaLinearAlgebra/Arpack.jl) (to compute the largest eigenvalue). You can also choose ```EigAlg="Normal"``` to use essential function of computing eigenvalues in Julia or ```EigAlg="Mix"``` to use the mixture of two methods. Notice that, Arpack is faster but has lower stability than the essential function while the mixture of two methods tries Arpack and catches the essential one.
 
 - ```tol=1e-5```: the precision of the solver for spectral minimization.
 
