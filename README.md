@@ -102,7 +102,7 @@ root = ASC_PolySys(x,h,k,L,method="LMBM",EigAlg="Arpack",tol=1e-5)
 # References
 For more details, please refer to:
 
-**N. H. A. Mai, J.-B. Lasserre, and V. Magron. A hierarchy of spectral relaxations for polynomial optimization, 2020. Forthcoming.**
+**N. H. A. Mai, J.-B. Lasserre, and V. Magron. [A hierarchy of spectral relaxations for polynomial optimization](https://arxiv.org/abs/2007.09027), 2020. Submitted.**
 
 The following commands allow one to reproduce the paper's benchmarks:
 ```ruby
