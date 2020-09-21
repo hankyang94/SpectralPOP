@@ -70,7 +70,7 @@ function Reconstruct(obj::NystromSketch)
         return U,Delta
     else
         C = cholesky(B)
-        F= svd(S/C)
+        F= svd(S/Matrix(C))
         U=F.U
         Sigma=F.S
         Delta = maximum([Sigma.^2 .- sigma;0])
