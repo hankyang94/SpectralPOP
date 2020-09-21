@@ -67,7 +67,10 @@ function CTP_POP(x::Vector{PolyVar{true}},f::Polynomial{true,Float64},h::Vector{
         if method=="LMBM" || method=="PB"
             @time opt_sol=ExtractionOptSol(n,l,v,s,a0,a,invInde,sol,invP,opt_val,f,h,x,EigAlg=EigAlg,showEvaluation=showEvaluation)
         elseif method=="SketchyCGAL"
-            invPmat=diagm(invP)
+            invPmat=zeros(Float64,s,s)
+            for j in 1:s
+                invPmat[j,j]=invP[j]
+            end
             @time opt_sol=extract_optimizer_moment_matrix(invPmat*sol*invPmat,s,v,n,l,opt_val,f,h,x)
         else
             opt_sol=Vector{Float64}([])
@@ -92,7 +95,11 @@ end
 
 function ExtractionOptSol(n::Int64,l::Int64,v::Matrix{UInt64},s::Int64,a0::Vector{Float64},a::SparseMatrixCSC{Float64},invInde::SparseMatrixCSC{UInt64},z::Vector{Float64},invP::Vector{Float64},opt_val::Float64,f::Polynomial{true,Float64},h::Vector{Polynomial{true,Float64}},x::Vector{PolyVar{true}};EigAlg="Arpack",showEvaluation=false)
     
-    P=diagm(invP.^-1)
+
+    P=zeros(Float64,s,s)
+    for j in 1:s
+        P[j,j]=1/invP[j]
+    end
     Gr=AdjOper(a0+a*z,invInde,s,showEvaluation=showEvaluation)
     eigval,eigvec=LargEig(Gr,s,EigAlg=EigAlg,showEvaluation=showEvaluation)
     for j in 1:s
