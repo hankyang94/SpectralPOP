@@ -9,7 +9,7 @@ function CTP_POP_on_Ball(x,f,g,h,k,R;EigAlg="Arpack",method="LMBM",tol=1e-5,show
     sol=0.0
     for j in 1:l_g
         println("**Conpute upper bound ",j)
-        invb,sol = SpectralPOP.CTP_POP([x;x_slack[1]],-g[j],[h;g[1]-x_slack[1]^2],k,R;method=method,EigAlg=EigAlg,tol=tol,showNormGrad=showNormGrad)
+        invb,sol = SpectralPOP.CTP_POP([x;x_slack[1]],-g[j],[h;g[1]-x_slack[1]^2],k,R;method=method,EigAlg=EigAlg,tol=tol)
         R_bar-=invb
         println("--------------------------")
     end
@@ -18,7 +18,7 @@ function CTP_POP_on_Ball(x,f,g,h,k,R;EigAlg="Arpack",method="LMBM",tol=1e-5,show
 
     bar_h=[h;[g[j]-x_slack[j]^2 for j in 1:l_g];R_bar-sum([x;x_slack].^2)]
     
-    opt_val,opt_sol = SpectralPOP.CTP_POP([x;x_slack],f,bar_h,k,R_bar;method=method,tol=tol,EigAlg=EigAlg)
+    opt_val,opt_sol = SpectralPOP.CTP_POP([x;x_slack],f,bar_h,k,R_bar;method=method,tol=tol,EigAlg=EigAlg,showNormGrad=showNormGrad)
     if opt_sol!=[]
         opt_sol=opt_sol[1:n]
     end
