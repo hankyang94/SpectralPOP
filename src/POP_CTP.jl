@@ -17,7 +17,7 @@ function CTP_POP_on_Ball(x,f,g,h,k,R;EigAlg="Arpack",method="LMBM",tol=1e-5,show
     println("  Radius of big ball: R_bar=",R_bar)
 
     bar_h=[h;[g[j]-x_slack[j]^2 for j in 1:l_g];R_bar-sum([x;x_slack].^2)]
-    
+
     opt_val,opt_sol = SpectralPOP.CTP_POP([x;x_slack],f,bar_h,k,R_bar;method=method,tol=tol,EigAlg=EigAlg,showNormGrad=showNormGrad)
     if opt_sol!=[]
         opt_sol=opt_sol[1:n]
@@ -57,8 +57,8 @@ function CTP_POP(x::Vector{PolyVar{true}},f::Polynomial{true,Float64},h::Vector{
         end
         @time n,l,v,s,m,a0,a,Ib,Vb,invInde,invP = ConvertStandardSDP(x,f,h,k)
         @time opt_val,sol=SpectralSDP(s,m,a0,a,Ib,Vb,invInde,(R+1)^k,method=method,EigAlg=EigAlg,tol=tol,showNormGrad=showNormGrad,showEvaluation=showEvaluation)
-     
-        
+
+
         println("------------------------------------")
         println("**Numerical result:")
         println("====================================")
@@ -75,7 +75,7 @@ function CTP_POP(x::Vector{PolyVar{true}},f::Polynomial{true,Float64},h::Vector{
         else
             opt_sol=Vector{Float64}([])
         end
-        
+
         if showNormGrad
             println("----------------------------")
             println("norm_grad=",norm_grad)
@@ -94,7 +94,7 @@ function CTP_POP(x::Vector{PolyVar{true}},f::Polynomial{true,Float64},h::Vector{
 end
 
 function ExtractionOptSol(n::Int64,l::Int64,v::Matrix{UInt64},s::Int64,a0::Vector{Float64},a::SparseMatrixCSC{Float64},invInde::SparseMatrixCSC{UInt64},z::Vector{Float64},invP::Vector{Float64},opt_val::Float64,f::Polynomial{true,Float64},h::Vector{Polynomial{true,Float64}},x::Vector{PolyVar{true}};EigAlg="Arpack",showEvaluation=false)
-    
+
 
     P=zeros(Float64,s,s)
     for j in 1:s
@@ -107,11 +107,11 @@ function ExtractionOptSol(n::Int64,l::Int64,v::Matrix{UInt64},s::Int64,a0::Vecto
     end
     Gr=P*Gr*P
     return extract_optimizer(Gr,s,v,n,l,opt_val,f,h,x)
- 
-end    
+
+end
 
 function SpectralSDP(s::Int64,m::Int64,a0::Vector{Float64},a::SparseMatrixCSC{Float64},Ib::Vector{UInt64},Vb::Vector{Float64},invInde::SparseMatrixCSC{UInt64,Int64},CT::Float64;method="LMBM",EigAlg="Arpack",tol=1e-5,showNormGrad=false,showEvaluation=false)
-   
+
     if method=="LMBM"
         println("**LMBM solver:")
 
@@ -164,17 +164,17 @@ function SpectralSDP(s::Int64,m::Int64,a0::Vector{Float64},a::SparseMatrixCSC{Fl
 
         optval, U, Delt = CGAL(UInt32(s),Primitive1,Primitive2,Primitive3, cons, b, R, maxit,STOPTOL=tol,showEvaluation=showEvaluation,EigAlg=EigAlg)
         optsol=U*Delt*U'
-        
+
         return optval, optsol
-    else 
+    else
         println("No CTP-SDP method!")
     end
-    
+
 end
 
 
 
-              
+
 
 function AdjOper(a::Vector{Float64},invInde::SparseMatrixCSC{UInt64},s::Int64;showEvaluation=false)
     if showEvaluation
@@ -185,32 +185,32 @@ function AdjOper(a::Vector{Float64},invInde::SparseMatrixCSC{UInt64},s::Int64;sh
         @inbounds B[i,j]=a[invInde[i,j]]
         @inbounds B[j,i]= copy(B[i,j])
     end
-    
+
     return B
 end
-               
+
 function LinearOper(s::Int64,a::SparseMatrixCSC{Float64},u::Vector{Float64};showEvaluation=false)
     if showEvaluation
         global linear_oper+=1
     end
-    return a'*[@inbounds u[i]*u[j]*(2-0^(j-i)) for i in 1:s for j in i:s]      
+    return a'*[@inbounds u[i]*u[j]*(2-0^(j-i)) for i in 1:s for j in i:s]
 end
-    
-  
+
+
 function LargEig(mat::Matrix{Float64},s::Int64;EigAlg="Arpack",showEvaluation=false)
     if showEvaluation
         global num_eig+=1
         global max_size=maximum([max_size,s])
     end
     if EigAlg=="Arpack"
-       E=eigs(mat,nev = 1,which=:LR) 
+       E=eigs(mat,nev = 1,which=:LR)
        return E[1][1],E[2][:,1]
     elseif EigAlg=="Normal"
        E=eigen(Symmetric(mat),s:s)
        return E.values[1],E.vectors[:,1]
     elseif EigAlg=="Mix"
-       try 
-           E=eigs(mat,nev = 1,which=:LR) 
+       try
+           E=eigs(mat,nev = 1,which=:LR)
            return E[1][1],E[2][:,1]
        catch
            E=eigen(Symmetric(mat),s:s)
@@ -218,20 +218,20 @@ function LargEig(mat::Matrix{Float64},s::Int64;EigAlg="Arpack",showEvaluation=fa
        end
     else
        println("No eigenvalue algorithm!!!")
-    end  
-    
+    end
+
 end
 
-    
+
 function ConvertStandardSDP(x::Vector{PolyVar{true}},f::Polynomial{true},h::Vector{Polynomial{true,Float64}},k::Int64)
 
     println("**Convert moment relaxation to standard SDP:")
-    
+
     n=length(x)
     l_h=length(h)
-            
-            
-            
+
+
+
     v=get_basis(n,2*k)
     s2k=size(v,2)
     sort_v=sortslices(v,dims=2)
@@ -239,27 +239,27 @@ function ConvertStandardSDP(x::Vector{PolyVar{true}},f::Polynomial{true},h::Vect
     @simd for j in 1:s2k
         @inbounds re_ind[bfind(sort_v,s2k,v[:,j],n)]=j
     end
-    sk=binomial(k+n,n)      
+    sk=binomial(k+n,n)
     println("  Size of psd matrix: sk=",sk)
-                    
-    Order(alpha::Vector{UInt64})=re_ind[bfind(sort_v,s2k,alpha,n)]        
-            
+
+    Order(alpha::Vector{UInt64})=re_ind[bfind(sort_v,s2k,alpha,n)]
+
     s2k_h=[@inbounds binomial(2*(k-ceil(Int64,maxdegree(h[j])/2))+n,n) for j in 1:l_h]
-    
+
     d=Int64(0.5*sk*(sk+1))
     m=d-s2k+1+sum(s2k_h)
     println("  Number of equality trace constraints: m=",m)
-   
-        
-    
+
+
+
     Ib=Vector{UInt64}([m])
     Vb=Vector{Float64}([1])
-        
-    
+
+
     IndM=[Vector{Int64}[] for j in 1:s2k]
     diagM=Vector{Int64}(undef,sk)
     invInde=spzeros(UInt64,sk,sk)
-    
+
     r=Int64(0)
     t=UInt64(1)
 
@@ -272,78 +272,83 @@ function ConvertStandardSDP(x::Vector{PolyVar{true}},f::Polynomial{true},h::Vect
             @inbounds diagM[i]=r
         end
     end
-    
+
     lmon,supp,coe=info((1+sum(x.^2))^k,x,n)
-    invP=invdiaP([@inbounds Order(supp[:,j]) for j in 1:lmon],coe,sk,diagM)
+    # invP=invdiaP([@inbounds Order(supp[:,j]) for j in 1:lmon],coe,sk,diagM)
+    invP=ones(lmon,1);
     l_IndM=[length(IndM[r]) for r in 1:s2k]
-    
+
     a=spzeros(Float64,d,m)
-   
+
     t=UInt64(1)
     I=zeros(UInt64,2)
-                
+
     for r in 1:s2k
         if l_IndM[r]>1
             for i in 2:l_IndM[r]
                 I=IndM[r][1]
-                if I[1]==I[2]     
+                if I[1]==I[2]
                     a[invInde[I[1],I[2]],t]=invP[I[1]]^2
                 else
-                    a[invInde[I[1],I[2]],t]=0.5*invP[I[1]]*invP[I[2]]
+                    # a[invInde[I[1],I[2]],t]=0.5*invP[I[1]]*invP[I[2]]
+                    a[invInde[I[1],I[2]],t]=0.5*sqrt(2)*invP[I[1]]*invP[I[2]]
                 end
-                
+
                 I=IndM[r][i]
-                if I[1]==I[2]     
+                if I[1]==I[2]
                     a[invInde[I[1],I[2]],t]=-invP[I[1]]^2
                 else
-                    a[invInde[I[1],I[2]],t]=-0.5*invP[I[1]]*invP[I[2]]
+                    # a[invInde[I[1],I[2]],t]=-0.5*invP[I[1]]*invP[I[2]]
+                    a[invInde[I[1],I[2]],t]=-0.5*sqrt(2)*invP[I[1]]*invP[I[2]]
                 end
                 t+=1
-              
+
            end
-           
+
             IndM[r]=Vector{Int64}[IndM[r][end]]
        end
     end
-   
-            
-            
+
+
+
     I=zeros(UInt64,2)
-    
-    
+
+
     @simd for j in 1:l_h
         @inbounds lmon,supp,coe=info(h[j],x,n)
         @simd for r in 1:s2k_h[j]
-            
-            @simd for p in 1:lmon 
+
+            @simd for p in 1:lmon
                 @inbounds I=IndM[Order(supp[:,p]+v[:,r])][1]
                       if I[1]==I[2]
                           @inbounds a[invInde[I[1],I[2]],t]=coe[p]*invP[I[1]]^2
                       else
-                          @inbounds a[invInde[I[1],I[2]],t]=0.5*coe[p]*invP[I[1]]*invP[I[2]]
+                          # @inbounds a[invInde[I[1],I[2]],t]=0.5*coe[p]*invP[I[1]]*invP[I[2]]
+                          @inbounds a[invInde[I[1],I[2]],t]=0.5*sqrt(2)*coe[p]*invP[I[1]]*invP[I[2]]
                       end
                    end
                 t+=1
-               end       
-    end 
+               end
+    end
 
-   
+
     a[1,t]=-1
     t+=1
-    
+
     a0=zeros(Float64,d)
-    
-    
+
+
     lmon,supp,coe=info(f,x,n)
     @simd for p in 1:lmon
         @inbounds I=IndM[Order(supp[:,p])][1]
       if I[1]==I[2]
           @inbounds a0[invInde[I[1],I[2]]]=-coe[p]*invP[I[1]]^2
       else
-          @inbounds a0[invInde[I[1],I[2]]]=-0.5*coe[p]*invP[I[1]]*invP[I[2]]
+          # @inbounds a0[invInde[I[1],I[2]]]=-0.5*coe[p]*invP[I[1]]*invP[I[2]]
+          @inbounds a0[invInde[I[1],I[2]]]=-0.5*sqrt(2)*coe[p]*invP[I[1]]*invP[I[2]]
       end
    end
-   
-            
+
+
    return n,l_h,v[:,1:sk],sk,m,a0,a,Ib,Vb,invInde,invP
 end
